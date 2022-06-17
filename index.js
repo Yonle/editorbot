@@ -39,7 +39,7 @@ bot.on("message", (nick, to, text) => {
 
             let ln = linenum + 1;
             usess.code.slice(linenum).forEach((c) => {
-              if (eln && ln > eln) return;
+              if (eln && ln >= eln) return;
               ln++;
               bot.say(to, ln + "|" + c);
             });
