@@ -37,7 +37,7 @@ bot.on("message", (nick, to, text) => {
                 "There's no line " + (linenum + 1) + " in your code."
               );
 
-            let ln = linenum + 1;
+            let ln = linenum;
             usess.code.slice(linenum).forEach((c) => {
               if (eln && ln >= eln) return;
               ln++;
@@ -47,6 +47,7 @@ bot.on("message", (nick, to, text) => {
             let ln = 0;
             usess.code.forEach((c) => {
               ln++;
+
               bot.say(to, ln + "|" + c);
             });
           }
