@@ -8,6 +8,7 @@ const sess = new Map();
 bot.on("message", (nick, to, text) => {
   let userdir = __dirname + "/.codes/" + nick;
   if (nick === config.nick) return;
+  if (to === config.nick) to = nick;
   if (sess.has(nick)) {
     // User is in editing session.
     let usess = sess.get(nick);
