@@ -133,15 +133,15 @@ bot.on("message", (nick, to, text) => {
           let to = splitted[1];
           if (!from || !to) return bot.say(to, "Usage: .rn [from]|[to]");
           if (
-            from.startsWith("..") ||
+            from.includes("..") ||
             from.includes("/") ||
-            to.startsWith("..") ||
+            to.includes("..") ||
             to.includes("/")
           )
             return bot.say(to, "rename: Illegal file name.");
 
           try {
-            fs.renameSync(from, to);
+            fs.renameSync(userdir + "/" + from, userdir + "/" + to);
             bot.say(to, "rename: " + from + " as " + to);
           } catch (error) {
             bot.say(to, error.toString());
@@ -151,7 +151,7 @@ bot.on("message", (nick, to, text) => {
         break;
       case ".rm":
         if (!name) return bot.say(to, "Usage: .rm [filename]");
-        if (name.startsWith("..") || name.includes("/"))
+        if (name.includes("..") || name.includes("/"))
           return bot.say(to, "rm: Illegal file name");
 
         try {
@@ -161,7 +161,7 @@ bot.on("message", (nick, to, text) => {
         break;
       case ".e":
         if (!name) name = "main.txt";
-        if (name.startsWith("..") || name.includes("/"))
+        if (name.includes("..") || name.includes("/"))
           return bot.say(to, "edit: Illegal file name");
         sess.set(nick, {
           filename: name,
