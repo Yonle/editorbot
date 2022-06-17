@@ -110,7 +110,12 @@ bot.on("message", (nick, to, text) => {
         );
         break;
       case ".ls":
-        bot.say(to, fs.readdirSync(userdir).join(", "));
+        try {
+          bot.say(to, fs.readdirSync(userdir).join(", "));
+        } catch (error) {
+          if (error.code === "ENOENT") return;"
+          console.error(error);
+        }
         break;
       case ".rm":
         if (!name) return bot.say(to, "Usage: .rm [filename]");
