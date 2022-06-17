@@ -20,7 +20,7 @@ bot.on("message", (nick, to, text) => {
             ".v  [from] [to]  : View Code",
             ".nl [lineNumber] : Create new line",
             ".dl [lineNumber] : Delete Line",
-            ".s : Save code",
+            ".w : Save code",
             ".q : Quit Session & Edit another code",
             'How to edit: Type your message in this format: "[lineNumber] [code]"',
             '             Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
@@ -80,7 +80,7 @@ bot.on("message", (nick, to, text) => {
           return usess.code.pop();
         }
         break;
-      case ".s":
+      case ".w":
         try {
           fs.writeFileSync(
             userdir + "/" + usess.filename,
