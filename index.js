@@ -20,7 +20,7 @@ bot.on("message", (nick, to, text) => {
             ".v  [from] [to]  : View Code",
             ".nl [lineNumber] : Create new line",
             ".dl [lineNumber] : Delete Line",
-            ".w : Save code",
+            ".w : Write file",
             ".q : Quit Session & Edit another code",
             'How to edit: Type your message in this format: "[lineNumber] [code]"',
             '             Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
