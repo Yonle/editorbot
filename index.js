@@ -130,19 +130,19 @@ bot.on("message", (nick, to, text) => {
         {
           let splitted = name.split("|");
           let from = splitted[0];
-          let to = splitted[1];
-          if (!from || !to) return bot.say(to, "Usage: .rn [from]|[to]");
+          let toName = splitted[1];
+          if (!from || !toName) return bot.say(to, "Usage: .rn [from]|[to]");
           if (
             from.includes("..") ||
             from.includes("/") ||
-            to.includes("..") ||
-            to.includes("/")
+            toName.includes("..") ||
+            toName.includes("/")
           )
             return bot.say(to, "rename: Illegal file name.");
 
           try {
-            fs.renameSync(userdir + "/" + from, userdir + "/" + to);
-            bot.say(to, "rename: " + from + " as " + to);
+            fs.renameSync(userdir + "/" + from, userdir + "/" + toName);
+            bot.say(to, "rename: " + from + " as " + toName);
           } catch (error) {
             bot.say(to, error.toString());
             console.error(error);
