@@ -21,10 +21,11 @@ bot.on("message", (nick, to, text) => {
             ".dl [lineNumber] : Delete Line",
             ".s : Save code",
             ".q : Quit Session & Edit another code",
-            '\nHow to edit: Type your message in this format: "[lineNumber] [code]"',
-            '           Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
+            'How to edit: Type your message in this format: "[lineNumber] [code]"',
+            '             Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
           ].join("\n")
         );
+        break;
       case ".v":
         {
           let linenum = Number(text.split(" ").slice(1)[0]);
