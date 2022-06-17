@@ -101,7 +101,7 @@ bot.on("message", (nick, to, text) => {
       default:
         let m = text.split(" ");
         let n = parseInt(m[0], 10);
-        if (n > 0) usess.code[m[0] - 1] = m.slice(1).join(" ");
+        if (n > 0) usess.code[n - 1] = m.slice(1).join(" ");
         break;
     }
   } else {
