@@ -113,7 +113,8 @@ bot.on("message", (nick, to, text) => {
         try {
           bot.say(to, fs.readdirSync(userdir).join(", "));
         } catch (error) {
-          if (error.code === "ENOENT") return;"
+          if (error.code === "ENOENT") return;
+          bot.say(to, error.toString());
           console.error(error);
         }
         break;
