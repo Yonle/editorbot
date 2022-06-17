@@ -67,10 +67,10 @@ bot.on("message", (nick, to, text) => {
                 to,
                 "There's no line " + (linenum + 1) + " in your code."
               );
-            usess.code[linenum] = ["", usess.code[linenum]];
+            usess.code[linenum] = [" ", usess.code[linenum]];
             return (usess.code = usess.code.flat(Infinity));
           }
-          usess.code.push("");
+          usess.code.push(" ");
         }
         break;
       case ".dl":
@@ -84,7 +84,10 @@ bot.on("message", (nick, to, text) => {
         try {
           fs.writeFileSync(
             userdir + "/" + usess.filename,
-            usess.code.join("\n"),
+            usess.code.map(i => {
+              if (i === " ") i = "";
+              return i;
+            }).join("\n"),
             "ascii"
           );
           bot.say(
@@ -179,7 +182,10 @@ bot.on("message", (nick, to, text) => {
         if (fs.existsSync(userdir + "/" + name)) {
           sess.get(nick).code = fs
             .readFileSync(userdir + "/" + name, "ascii")
-            .split("\n");
+            .split("\n").map(i => {
+              if (!i.length) i = " ";
+              return i;
+            });
         }
 
         bot.say(to, "Filename: " + name);
