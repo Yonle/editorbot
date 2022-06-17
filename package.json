@@ -1,0 +1,27 @@
+{
+  "name": "editorbot",
+  "version": "1.0.0",
+  "description": "A IRC bot that acts like a code editor",
+  "main": "index.js",
+  "dependencies": {
+    "matrix-org-irc": "latest"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Yonle/editorbot.git"
+  },
+  "keywords": [
+    "editor",
+    "bot",
+    "irc"
+  ],
+  "author": "Yonle <yonle@duck.com>",
+  "license": "EPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Yonle/editorbot/issues"
+  },
+  "homepage": "https://github.com/Yonle/editorbot#readme"
+}
