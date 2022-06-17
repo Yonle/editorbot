@@ -7,21 +7,24 @@ const sess = new Map();
 
 bot.on("message", (nick, to, text) => {
   let userdir = __dirname + "/.codes/" + nick;
-  if (nick === "eidtorbot") return;
+  if (nick === config.nick) return;
   if (sess.has(nick)) {
     // User is in editing session.
     let usess = sess.get(nick);
     switch (text.split(" ")[0]) {
       case ".h":
-        bot.say(to, [
-          ".v  [from] [to]  : View Code",
-          ".nl [lineNumber] : Create new line",
-          ".dl [lineNumber] : Delete Line",
-          ".s : Save code",
-          ".q : Quit Session & Edit another code",
-          "\nHow to edit: Type your message in this format: \"[lineNumber] [code]\"",
-          "           Say, You will edit line 12. Just type \"12 Lorem Ipsum\" and you're done."
-        ].join("\n"));
+        bot.say(
+          to,
+          [
+            ".v  [from] [to]  : View Code",
+            ".nl [lineNumber] : Create new line",
+            ".dl [lineNumber] : Delete Line",
+            ".s : Save code",
+            ".q : Quit Session & Edit another code",
+            '\nHow to edit: Type your message in this format: "[lineNumber] [code]"',
+            '           Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
+          ].join("\n")
+        );
       case ".v":
         {
           let linenum = Number(text.split(" ").slice(1)[0]);
@@ -35,7 +38,7 @@ bot.on("message", (nick, to, text) => {
               );
 
             let ln = linenum + 1;
-            usess.code.slice(ln).forEach((c) => {
+            usess.code.slice(linenum).forEach((c) => {
               if (eln && ln > eln) return;
               ln++;
               bot.say(to, ln + "|" + c);
@@ -75,15 +78,20 @@ bot.on("message", (nick, to, text) => {
         }
         break;
       case ".s":
-        fs.writeFileSync(
-          userdir + "/" + usess.filename,
-          usess.code.join("\n"),
-          "ascii"
-        );
-        bot.say(
-          to,
-          `${usess.filename}: write ${usess.code.length} lines of code`
-        );
+        try {
+          fs.writeFileSync(
+            userdir + "/" + usess.filename,
+            usess.code.join("\n"),
+            "ascii"
+          );
+          bot.say(
+            to,
+            `${usess.filename}: write ${usess.code.length} lines of code`
+          );
+        } catch (error) {
+          bot.say(to, error.toString());
+          console.error(error);
+        }
         break;
       case ".q":
         sess.delete(nick);
@@ -105,7 +113,7 @@ bot.on("message", (nick, to, text) => {
           [
             "Hello. I'm a file editor bot.",
             "To start editing, type .e [filename]",
-            "You can use .ls, or .rm to manage your file.",
+            "You can use .ls, .rn, or .rm to manage your file.",
           ].join("\n")
         );
         break;
@@ -116,6 +124,29 @@ bot.on("message", (nick, to, text) => {
           if (error.code === "ENOENT") return;
           bot.say(to, error.toString());
           console.error(error);
+        }
+        break;
+      case ".rn":
+        {
+          let splitted = name.split("|");
+          let from = splitted[0];
+          let to = splitted[1];
+          if (!from || !to) return bot.say(to, "Usage: .rn [from]|[to]");
+          if (
+            from.startsWith("..") ||
+            from.includes("/") ||
+            to.startsWith("..") ||
+            to.includes("/")
+          )
+            return bot.say(to, "rename: Illegal file name.");
+
+          try {
+            fs.renameSync(from, to);
+            bot.say(to, "rename: " + from + " as " + to);
+          } catch (error) {
+            bot.say(to, error.toString());
+            console.error(error);
+          }
         }
         break;
       case ".rm":
@@ -160,4 +191,4 @@ bot.on("message", (nick, to, text) => {
   }
 });
 
-bot.on('error', console.error);
+bot.on("error", console.error);
