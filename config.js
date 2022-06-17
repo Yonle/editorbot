@@ -5,5 +5,7 @@ module.exports = {
    	 "#main"
    ],
 
-   nick: "editorbot"
+   nick: "editorbot",
+   userName: "editorbot",
+   realName: "Editor Bot"
 }
