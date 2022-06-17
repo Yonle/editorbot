@@ -153,3 +153,5 @@ bot.on("message", (nick, to, text) => {
     }
   }
 });
+
+bot.on('error', console.error);
