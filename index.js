@@ -100,8 +100,8 @@ bot.on("message", (nick, to, text) => {
         break;
       default:
         let m = text.split(" ");
-        if (Number(m[0]) == NaN) return;
-        usess.code[m[0] - 1] = m.slice(1).join(" ");
+        let n = parseInt(m[0], 10);
+        if (n > 0) usess.code[m[0] - 1] = m.slice(1).join(" ");
         break;
     }
   } else {
