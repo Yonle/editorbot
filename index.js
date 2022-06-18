@@ -85,7 +85,7 @@ bot.on("message", (nick, to, text) => {
           if (linenum) {
             delete usess.code[linenum - 1];
             return (usess.code = usess.code.flat(Infinity));
-          };
+          }
 
           return usess.code.pop();
         }
@@ -113,6 +113,11 @@ bot.on("message", (nick, to, text) => {
         }
         break;
       case ".q":
+        if (usess.collaborators)
+          usess.collaborators.forEach((i) => {
+            sess.delete(i);
+            usess.collaborators.delete(i);
+          });
         sess.delete(nick);
         bot.say(to, "quit: " + nick);
         if (usess.croom)
