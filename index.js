@@ -15,7 +15,10 @@ bot.on("message", (nick, to, text) => {
   if (sess.has(nick)) {
     // User is in editing session.
     let usess = sess.get(nick);
-    if (usess.croom) usess = sess.get(usess.croom);
+    if (usess.croom) {
+      userdir = __dirname + "/.codes/" + usess.croom;
+      usess = sess.get(usess.croom);
+    }
     switch (text.split(" ")[0]) {
       case ".h":
         bot.say(
@@ -91,7 +94,6 @@ bot.on("message", (nick, to, text) => {
         }
         break;
       case ".w":
-        if (sess.get(nick).croom) return;
         try {
           fs.writeFileSync(
             userdir + "/" + usess.filename,
