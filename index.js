@@ -82,7 +82,11 @@ bot.on("message", (nick, to, text) => {
       case ".dl":
         {
           let linenum = Number(text.split(" ").slice(1)[0]);
-          if (linenum) return delete usess.code[linenum - 1];
+          if (linenum) {
+            delete usess.code[linenum - 1];
+            return (usess.code = usess.code.flat(Infinity));
+          };
+
           return usess.code.pop();
         }
         break;
