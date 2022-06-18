@@ -7,5 +7,6 @@ module.exports = {
 
    nick: "editorbot",
    userName: "editorbot",
-   realName: "Editor Bot"
+   realName: "Editor Bot",
+   floodProtection: false
 }
