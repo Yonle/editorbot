@@ -171,7 +171,11 @@ bot.on("message", (nick, to, text) => {
       default:
         let m = text.split(" ");
         let n = parseInt(m[0], 10);
-        if (n > 0) usess.code[n - 1] = m.slice(1).join(" ");
+        if (n > 0) {
+          usess.code[n - 1] = m.slice(1).join(" ");
+          usess.code = usess.code.flat(Infinity);
+        }
+
         break;
     }
   } else {
@@ -241,9 +245,13 @@ bot.on("message", (nick, to, text) => {
             return bot.say(to, "share: Usage: .s [to] [filename]");
           if (!inbox.has(uname)) inbox.set(uname, []);
 
-          if (inbox.get(uname).filter(i =>
-            i.fromUser === nick && i.filename === filename
-          ).length > 0) return bot.say(to, "share: That file is already in queue.");
+          if (
+            inbox
+              .get(uname)
+              .filter((i) => i.fromUser === nick && i.filename === filename)
+              .length > 0
+          )
+            return bot.say(to, "share: That file is already in queue.");
 
           let n = inbox.get(uname).push({
             fromUser: nick,
@@ -254,7 +262,10 @@ bot.on("message", (nick, to, text) => {
           bot.notice(uname, `To accept this, Type .i ${n}`);
           bot.notice(uname, `To refuse this request, Type .ri ${n}`);
           bot.say(to, `share: Request sent to ${uname}.`);
-          bot.say(to, `share: To cancel sending this file, Send ".cs ${uname} ${filename}"`);
+          bot.say(
+            to,
+            `share: To cancel sending this file, Send ".cs ${uname} ${filename}"`
+          );
         }
         break;
       case ".cs":
@@ -264,19 +275,30 @@ bot.on("message", (nick, to, text) => {
           let filename = splitted.slice(1).join(" ");
           if (filename.includes("..") || filename.includes("/"))
             return bot.say(to, "cancel_send: Illegal file name");
-          if (!inbox.has(uname) || !filename) return bot.say(to, "cancel_send: Usage: .cs [username] [filename]");
+          if (!inbox.has(uname) || !filename)
+            return bot.say(to, "cancel_send: Usage: .cs [username] [filename]");
 
-          let uib = inbox.get(uname).filter(i =>
-            i.fromUser === nick && i.filename === filename
+          let uib = inbox
+            .get(uname)
+            .filter((i) => i.fromUser === nick && i.filename === filename);
+
+          if (!uib.length)
+            return bot.say(
+              to,
+              `cancel_send: You didn't send ${filename} to ${uname}`
+            );
+          inbox.set(
+            uname,
+            inbox.get(uname).filter((i) => {
+              i.fromUser !== nick && i.filename !== filename;
+            })
           );
 
-          if (!uib.length) return bot.say(to, `cancel_send: You didn't send ${filename} to ${uname}`);
-          inbox.set(uname, inbox.get(uname).filter(i => {
-            i.fromUser !== nick && i.filename !== filename
-          }));
-
           bot.say(to, "cancel_send: Succesfully cancelled");
-          bot.notice(uname, `cancel_send: ${nick} cancelled to send ${filename}.`);
+          bot.notice(
+            uname,
+            `cancel_send: ${nick} cancelled to send ${filename}.`
+          );
         }
         break;
       case ".i":
@@ -285,7 +307,8 @@ bot.on("message", (nick, to, text) => {
           if (!inbox.has(nick) || !inbox.get(nick).length)
             return bot.say(to, "inbox: empty");
           if (!name) {
-            if (nick !== to) bot.say(to, `${nick}: Inbox list has been sent to PM.`);
+            if (nick !== to)
+              bot.say(to, `${nick}: Inbox list has been sent to PM.`);
             bot.say(
               nick,
               `Inbox: You have ${inbox.get(nick).length} pending requests`
@@ -314,13 +337,23 @@ bot.on("message", (nick, to, text) => {
                 }), Skipped`
               );
 
-            if (!fs.existsSync(__dirname + "/.codes/" + i.fromUser + "/" + i.filename)) {
-              bot.say(to, `share: ${i.fromUser} deleted ${i.filename}. Operation cancelled.`);
-              bot.notice(i.fromUser, `share: You deleted ${i.filename} before ${nick} accept your request. Operation cancelled.`);
+            if (
+              !fs.existsSync(
+                __dirname + "/.codes/" + i.fromUser + "/" + i.filename
+              )
+            ) {
+              bot.say(
+                to,
+                `share: ${i.fromUser} deleted ${i.filename}. Operation cancelled.`
+              );
+              bot.notice(
+                i.fromUser,
+                `share: You deleted ${i.filename} before ${nick} accept your request. Operation cancelled.`
+              );
 
               delete inbox.get(nick)[parseInt(name, 10) - 1];
               return inbox.set(nick, inbox.get(nick).flat());
-            };
+            }
             fs.cpSync(
               __dirname + "/.codes/" + i.fromUser + "/" + i.filename,
               userdir + "/" + i.fromUser + "_" + i.filename
@@ -409,11 +442,13 @@ bot.on("message", (nick, to, text) => {
   }
 });
 
-bot.on("registered", () => console.log("login: Succesfully logged as", config.nick));
+bot.on("registered", () =>
+  console.log("login: Succesfully logged as", config.nick)
+);
 bot.on("motd", console.log);
 bot.on("error", console.error);
 
-process.on('SIGINT', () => {
+process.on("SIGINT", () => {
   console.log("\nWaiting for server to disconnect....");
   bot.disconnect("Editor Quit");
 });
