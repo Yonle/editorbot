@@ -19,7 +19,7 @@
     "irc"
   ],
   "author": "Yonle <yonle@duck.com>",
-  "license": "EPL-2.0",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Yonle/editorbot/issues"
   },
