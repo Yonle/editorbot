@@ -27,7 +27,7 @@ bot.on("message", (nick, to, text) => {
             ".v  [from] [to]  : View Code",
             ".nl [lineNumber] : Create new line",
             ".dl [lineNumber] : Delete Line",
-            ".i  [username]   : Invite user to collaboration",
+            ".i  [username]   : Invite user to collaborate",
             ".rc [username]   : Remove collaborator",
             ".w : Write file",
             ".q : Quit Session & Edit another code",
@@ -64,7 +64,7 @@ bot.on("message", (nick, to, text) => {
           }
         }
 
-        bot.say(to, "End of code. To add new line, Type .nl");
+        bot.say(to, "End of code. Type \".h\" for basic help.");
         break;
       case ".nl":
         {
@@ -123,7 +123,7 @@ bot.on("message", (nick, to, text) => {
         sess.delete(nick);
         bot.say(to, "quit: " + nick);
         if (usess.croom)
-          bot.notice(usess.croom, `Collab: ${nick} left the room.`);
+          bot.notice(usess.croom, `Collab: ${nick} left`);
         break;
       case ".i":
         {
@@ -146,7 +146,7 @@ bot.on("message", (nick, to, text) => {
             usess.collaborators.add(name);
             bot.notice(
               name,
-              `Collab: ${nick} invites you to edit together at ${
+              `Collab: ${nick} invites you to edit at ${
                 to === nick ? "PM" : to
               }.`
             );
@@ -185,7 +185,7 @@ bot.on("message", (nick, to, text) => {
         bot.say(
           to,
           [
-            "Hello. I'm a file editor bot.",
+            "Hello. I am file editor bot.",
             "To start editing, type .e [filename]",
             "You can use .ls, .rn, .rm, .i, and .s to manage your files.",
           ].join("\n")
@@ -213,7 +213,7 @@ bot.on("message", (nick, to, text) => {
             toName.includes("..") ||
             toName.includes("/")
           )
-            return bot.say(to, "rename: Illegal file name.");
+            return bot.say(to, "rename: Invalid file name.");
 
           try {
             fs.renameSync(userdir + "/" + from, userdir + "/" + toName);
@@ -227,7 +227,7 @@ bot.on("message", (nick, to, text) => {
       case ".rm":
         if (!name) return bot.say(to, "remove: Usage: .rm [filename]");
         if (name.includes("..") || name.includes("/"))
-          return bot.say(to, "rm: Illegal file name");
+          return bot.say(to, "rm: Invalid file name");
 
         try {
           fs.rmSync(userdir + "/" + name);
@@ -240,7 +240,7 @@ bot.on("message", (nick, to, text) => {
           let uname = splitted[0];
           let filename = splitted.slice(1).join(" ");
           if (filename.includes("..") || filename.includes("/"))
-            return bot.say(to, "share: Illegal file name");
+            return bot.say(to, "share: Invalid file name");
           if (!uname || !fs.existsSync(userdir + "/" + filename))
             return bot.say(to, "share: Usage: .s [to] [filename]");
           if (!inbox.has(uname)) inbox.set(uname, []);
@@ -260,11 +260,11 @@ bot.on("message", (nick, to, text) => {
 
           bot.notice(uname, `${nick} is sending you a file: ${filename}`);
           bot.notice(uname, `To accept this, Type .i ${n}`);
-          bot.notice(uname, `To refuse this request, Type .ri ${n}`);
+          bot.notice(uname, `To reject this request, Type .ri ${n}`);
           bot.say(to, `share: Request sent to ${uname}.`);
           bot.say(
             to,
-            `share: To cancel sending this file, Send ".cs ${uname} ${filename}"`
+            `share: To cancel this, Type ".cs ${uname} ${filename}"`
           );
         }
         break;
@@ -274,7 +274,7 @@ bot.on("message", (nick, to, text) => {
           let uname = splitted[0];
           let filename = splitted.slice(1).join(" ");
           if (filename.includes("..") || filename.includes("/"))
-            return bot.say(to, "cancel_send: Illegal file name");
+            return bot.say(to, "cancel_send: Invalid file name");
           if (!inbox.has(uname) || !filename)
             return bot.say(to, "cancel_send: Usage: .cs [username] [filename]");
 
@@ -322,7 +322,7 @@ bot.on("message", (nick, to, text) => {
 
             bot.say(
               nick,
-              "End of Inbox. To accept one of those code sending request, Type .i [num]"
+              "End of Inbox. To accept one of those requests, Type .i [num]"
             );
             bot.say(nick, "To Reject request, Do .ri [num]");
           } else if (parseInt(name, 10) > 0) {
@@ -386,7 +386,7 @@ bot.on("message", (nick, to, text) => {
       case ".e":
         if (!name) name = "main.txt";
         if (name.includes("..") || name.includes("/"))
-          return bot.say(to, "edit: Illegal file name");
+          return bot.say(to, "edit: Invalid file name");
         sess.set(nick, {
           filename: name,
           code: [],
