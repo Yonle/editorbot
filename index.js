@@ -29,10 +29,10 @@ bot.on("message", (nick, to, text) => {
             ".dl [lineNumber] : Delete Line",
             ".i  [username]   : Invite user to collaborate",
             ".rc [username]   : Remove collaborator",
-            ".w : Write file",
-            ".q : Quit Session & Edit another code",
+            ".w               : Write file",
+            ".q               : Quit Session",
             'How to edit: Type your message in this format: "[lineNumber] [code]"',
-            'Say, You will edit line 12. Just type "12 Lorem Ipsum" and you\'re done.',
+            'Say, You want to edit the 12th line. Type "12 Lorem Ipsum" and done.',
           ].join("\n")
         );
         break;
@@ -64,7 +64,7 @@ bot.on("message", (nick, to, text) => {
           }
         }
 
-        bot.say(to, "End of code. Type \".h\" for basic help.");
+        bot.say(to, "End of code. Type \".nl\" to add new line.");
         break;
       case ".nl":
         {
@@ -413,7 +413,7 @@ bot.on("message", (nick, to, text) => {
           to,
           "Reading " +
             sess.get(nick).code.length +
-            " lines of code. To view code, Type .v"
+            " lines of code. Type \".h\" for basic help."
         );
         break;
       case ".ec":
@@ -447,6 +447,11 @@ bot.on("registered", () =>
 );
 bot.on("motd", console.log);
 bot.on("error", console.error);
+
+if (config.acceptInvites)
+  bot.on("invite", (c) => {
+    bot.join(c);
+  });
 
 process.on("SIGINT", () => {
   console.log("\nWaiting for server to disconnect....");

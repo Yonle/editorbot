@@ -8,5 +8,8 @@ module.exports = {
    nick: "editorbot",
    userName: "editorbot",
    realName: "Editor Bot",
-   floodProtection: false
+   floodProtection: false,
+   autoRejoin: true,
+
+   acceptInvites: true
 }
